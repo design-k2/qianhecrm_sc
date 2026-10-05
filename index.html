@@ -206,7 +206,7 @@ p { margin: 0; }
 .limit { margin-top: 40px; padding: 18px 22px; border-left: 4px solid #f0a020; background: rgba(255, 255, 255, 0.07); max-width: 46em; }
 
 /* ---------- 下载 ---------- */
-.download { padding: 100px 0 90px; }
+.download { padding: 100px 0 70px; }
 .files { margin-top: 40px; border-top: 2px solid var(--ink); }
 .file {
     display: grid;
@@ -226,6 +226,10 @@ p { margin: 0; }
 .req th, .req td { text-align: left; vertical-align: top; padding: 12px 0; border-bottom: 1px solid var(--line); font-weight: 400; }
 .req th { width: 8em; color: var(--muted); }
 .notice { margin-top: 30px; color: var(--muted); font-size: 15px; max-width: 46em; }
+
+/* ---------- 横幅 ---------- */
+.banner { padding: 0 0 90px; }
+.banner img { width: 100%; padding: 4px 34px; border: 1px solid var(--line); border-radius: 8px; background: rgb(254, 254, 254); }
 
 /* ---------- 常见问题与页脚 ---------- */
 .faq { background: var(--paper); padding: 90px 0; }
@@ -455,6 +459,12 @@ footer span:first-child { margin-right: auto; }
       </table>
     </div>
     <p class="notice">安装程序暂未进行代码签名，运行时 Windows 可能显示安全提示。请确认文件来自本页面后，选择“更多信息”并继续运行。</p>
+  </div>
+</section>
+
+<section class="banner" aria-label="淘宝店铺">
+  <div class="wrap">
+    <img loading="lazy" src="assets/img/banner-taobao.png" width="1600" height="298" alt="在淘宝搜索：千鹤软件">
   </div>
 </section>
 
