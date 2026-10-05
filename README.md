@@ -10,6 +10,12 @@
 
 当前版本 1.0.0。
 
+下载渠道：
+
+1. [123 网盘](https://1838860709.share.123pan.cn/123pan/u00GTd-Vy2ad)
+2. [微软 OneDrive](https://1drv.ms/f/c/B9800037B3890E00/IgCnmx_VlgRMS78LgMM50P1YAetEV6fvsBYorOo61fWa4zE?e=WGa3kF)
+3. 本仓库直接下载（见下表）
+
 | 文件 | 说明 | 大小 |
 | --- | --- | --- |
 | [QianheCRM_1.0.0_Setup.exe](downloads/QianheCRM_1.0.0_Setup.exe) | 安装程序（推荐）。数据保存在 `C:\ProgramData\QianheCRM` | 26 MB |
