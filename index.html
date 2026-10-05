@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>千鹤CRM 生产制造版 - 制造业销售部门的客户管理软件</title>
+<meta name="description" content="千鹤CRM 生产制造版：在一台电脑上管理客户、报价、样品、合同、发货与回款的单机客户管理软件，适用于 Windows 7 SP1 至 Windows 11。">
+<link rel="icon" href="favicon.ico">
+<style>
+/* 字体只截取了本页用到的字，见 build-fonts.py */
+@font-face { font-family: "Qianhe Sans"; font-weight: 400; font-display: swap; src: url("assets/fonts/NotoSansSC-Regular.subset.woff2") format("woff2"); }
+@font-face { font-family: "Qianhe Sans"; font-weight: 700; font-display: swap; src: url("assets/fonts/NotoSansSC-Bold.subset.woff2") format("woff2"); }
+
+:root {
+    --blue: #1f5ea8;
+    --blue-deep: #17437c;
+    --navy: #0e2852;
+    --ink: #1b2330;
+    --muted: #5d6878;
+    --paper: #f1f4f8;
+    --line: #c5cfdc;
+    --stamp: #c8322b;
+    --wrap: 1120px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+    margin: 0;
+    font-family: "Qianhe Sans", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--ink);
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--blue); }
+a:focus-visible, .button:focus-visible { outline: 3px solid #f0a020; outline-offset: 3px; }
+.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 28px; }
+
+h1, h2, h3 { margin: 0; line-height: 1.3; font-weight: 700; }
+h2 { font-size: 34px; letter-spacing: -0.01em; }
+p { margin: 0; }
+.lead { font-size: 18px; color: var(--muted); max-width: 34em; margin-top: 14px; }
+
+/* ---------- 顶部与首屏 ---------- */
+.top {
+    color: #fff;
+    background: linear-gradient(152deg, var(--blue) 0%, var(--blue-deep) 48%, var(--navy) 100%);
+    overflow: hidden;
+    position: relative;
+}
+.top::before {
+    content: "";
+    position: absolute;
+    width: 620px; height: 620px;
+    right: -180px; top: -260px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.055);
+}
+
+.nav { display: flex; align-items: center; gap: 30px; padding-top: 22px; padding-bottom: 22px; position: relative; }
+.brand { display: flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; font-weight: 700; font-size: 20px; margin-right: auto; }
+.brand img { width: 38px; height: 38px; border-radius: 9px; }
+.nav a.link { color: #d5e2f5; text-decoration: none; font-size: 15px; }
+.nav a.link:hover { color: #fff; text-decoration: underline; text-underline-offset: 5px; }
+
+.hero { position: relative; padding-top: 58px; }
+.hero h1 { font-size: 54px; letter-spacing: -0.02em; max-width: 13em; }
+.hero .intro { font-size: 19px; color: #d5e2f5; max-width: 31em; margin-top: 22px; }
+.actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+
+.button {
+    display: inline-block;
+    padding: 13px 30px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
+    border: 2px solid transparent;
+}
+.button.primary { background: #fff; color: var(--blue-deep); }
+.button.primary:hover { background: #e5eefa; }
+.button.ghost { border-color: rgba(255, 255, 255, 0.55); color: #fff; }
+.button.ghost:hover { background: rgba(255, 255, 255, 0.12); }
+.button.solid { background: var(--blue); color: #fff; }
+.button.solid:hover { background: var(--blue-deep); }
+
+.hero .fine { margin-top: 18px; font-size: 14px; color: #a9c1e4; }
+.hero .shot {
+    margin-top: 54px;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 30px 80px rgba(4, 16, 40, 0.55);
+    width: 100%;
+}
+
+/* ---------- 流转卡 ---------- */
+.flow { background: var(--paper); padding: 96px 0 104px; }
+
+.card {
+    margin-top: 48px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+}
+.card-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 40px;
+    padding: 18px 34px;
+    border-bottom: 2px solid var(--ink);
+    font-size: 14px;
+    color: var(--muted);
+}
+.card-head strong { color: var(--ink); font-size: 16px; margin-right: auto; }
+.card-head span b { color: var(--ink); font-weight: 700; margin-left: 6px; }
+
+.stage {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 44px;
+    padding: 40px 34px;
+    border-top: 1px dashed var(--line);
+    position: relative;
+}
+.stage:first-of-type { border-top: 0; }
+
+.stage .no {
+    font-size: 64px;
+    line-height: 1;
+    font-weight: 700;
+    color: var(--blue);
+    font-variant-numeric: tabular-nums;
+}
+.stage h3 { font-size: 24px; margin-top: 14px; }
+/* 单据编号：做成挂在零件上的标签，左边一个穿绳孔 */
+.tag {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 4px 14px 4px 30px;
+    border: 1.5px solid var(--ink);
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+    position: relative;
+    background: #fff;
+}
+.tag::before {
+    content: "";
+    position: absolute;
+    left: 10px; top: 50%;
+    width: 9px; height: 9px;
+    margin-top: -5.5px;
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+}
+.tag + .tag { margin-top: 8px; }
+.tags { display: flex; flex-direction: column; align-items: flex-start; }
+
+.stage > div, .pair figure, .file > div { min-width: 0; }
+.stage .what p { max-width: 38em; }
+.stage .what p + p { margin-top: 10px; }
+.stage .what a.shot { display: block; margin-top: 24px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.stage .what a.shot:hover { border-color: var(--blue); }
+
+/* 报价环节的审批章：整页只有这一处用红色 */
+.stamp {
+    display: inline-block;
+    margin: 26px 0 0 8px;
+    padding: 6px 16px;
+    border: 3px solid var(--stamp);
+    border-radius: 6px;
+    color: var(--stamp);
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.35;
+    text-align: center;
+    letter-spacing: 0.12em;
+    transform: rotate(-7deg);
+    opacity: 0.88;
+    background: rgba(255, 255, 255, 0.6);
+}
+
+/* ---------- 管理者视角 ---------- */
+.overview { padding: 100px 0; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 44px; }
+.pair figure { margin: 0; }
+.pair img { border: 1px solid var(--line); border-radius: 6px; }
+.pair figcaption { margin-top: 16px; }
+.pair figcaption strong { display: block; font-size: 20px; }
+.pair figcaption span { color: var(--muted); }
+
+/* ---------- 数据 ---------- */
+.data { background: var(--navy); color: #fff; padding: 96px 0; }
+.data .lead { color: #b9cdea; }
+.facts { margin: 46px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 64px; }
+.facts div { padding: 22px 0; border-top: 1px solid rgba(255, 255, 255, 0.2); }
+.facts dt { font-weight: 700; font-size: 19px; }
+.facts dd { margin: 6px 0 0; color: #c5d6ee; }
+.limit { margin-top: 40px; padding: 18px 22px; border-left: 4px solid #f0a020; background: rgba(255, 255, 255, 0.07); max-width: 46em; }
+
+/* ---------- 下载 ---------- */
+.download { padding: 100px 0 90px; }
+.files { margin-top: 40px; border-top: 2px solid var(--ink); }
+.file {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px 30px;
+    align-items: center;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--line);
+}
+.file h3 { font-size: 21px; }
+.file p { color: var(--muted); max-width: 40em; }
+.file .size { font-size: 14px; color: var(--muted); margin-left: 12px; font-weight: 400; }
+
+.req { margin-top: 56px; display: grid; grid-template-columns: 250px 1fr; gap: 44px; }
+.req h3 { font-size: 22px; }
+.req table { width: 100%; border-collapse: collapse; }
+.req th, .req td { text-align: left; vertical-align: top; padding: 12px 0; border-bottom: 1px solid var(--line); font-weight: 400; }
+.req th { width: 8em; color: var(--muted); }
+.notice { margin-top: 30px; color: var(--muted); font-size: 15px; max-width: 46em; }
+
+/* ---------- 常见问题与页脚 ---------- */
+.faq { background: var(--paper); padding: 90px 0; }
+.faq dl { margin: 34px 0 0; max-width: 46em; }
+.faq dt { font-weight: 700; font-size: 19px; margin-top: 30px; }
+.faq dd { margin: 8px 0 0; color: #3a4556; }
+
+footer { padding: 34px 0 44px; font-size: 14px; color: var(--muted); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 30px; }
+footer span:first-child { margin-right: auto; }
+
+@media (max-width: 860px) {
+    h2 { font-size: 27px; }
+    .hero h1 { font-size: 36px; }
+    .hero .intro { font-size: 17px; }
+    .nav { gap: 18px; flex-wrap: wrap; }
+    .stage, .req { grid-template-columns: 1fr; gap: 22px; padding-left: 20px; padding-right: 20px; }
+    .req { padding-left: 0; padding-right: 0; }
+    .stage .no { font-size: 46px; }
+    .pair, .facts { grid-template-columns: 1fr; }
+    .file { grid-template-columns: 1fr; }
+    .card-head { padding: 16px 20px; }
+    .flow, .overview, .data, .download, .faq { padding-top: 64px; padding-bottom: 64px; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <nav class="wrap nav" aria-label="页面导航">
+    <a class="brand" href="#"><img src="assets/img/logo.png" alt="">千鹤CRM</a>
+    <a class="link" href="#flow">功能</a>
+    <a class="link" href="#data">数据安全</a>
+    <a class="link" href="#download">下载</a>
+    <a class="link" href="downloads/QianheCRM_Manual.pdf">使用说明</a>
+  </nav>
+
+  <div class="wrap hero">
+    <h1>为制造业销售部门准备的客户管理软件</h1>
+    <p class="intro">千鹤CRM 生产制造版在一台电脑上管理客户、报价、样品、合同、发货与回款。数据保存在本机，无需服务器，也无需联网。</p>
+    <div class="actions">
+      <a class="button primary" href="downloads/QianheCRM_1.0.0_Setup.exe">下载安装程序</a>
+      <a class="button ghost" href="downloads/QianheCRM_Manual.pdf">阅读使用说明</a>
+    </div>
+    <p class="fine">版本 1.0.0，适用于 Windows 7 SP1 至 Windows 11</p>
+    <img class="shot" src="assets/img/home.png" width="1500" height="899" alt="千鹤CRM 工作台：本月新增客户、跟进中商机金额、本月合同额、逾期未回款，以及待办提醒和销售漏斗">
+  </div>
+</header>
+
+<main>
+
+<section class="flow" id="flow">
+  <div class="wrap">
+    <h2>一笔订单在软件中的流转</h2>
+    <p class="lead">以一家紧固件客户为例，按业务发生的先后顺序，说明每个环节在软件中如何处理。各环节的单据相互关联，在客户档案中可一并查看。</p>
+
+    <div class="card">
+      <div class="card-head">
+        <strong>流转卡</strong>
+        <span>产品<b>M8×30 内六角螺栓，12.9 级，发黑</b></span>
+        <span>数量<b>100,000 个</b></span>
+      </div>
+
+      <article class="stage">
+        <div>
+          <div class="no">1</div>
+          <h3>线索</h3>
+          <div class="tags"><span class="tag">XS2610-0001</span></div>
+        </div>
+        <div class="what">
+          <p>登记展会名片、网站询价、电话开发等来源的潜在客户，并指定负责的业务员。</p>
+          <p>保存时按公司名称和手机号查重，名称相近的线索与客户会一并列出。确认有效后转为正式客户，此前的跟进记录和附件随之转入客户名下。</p>
+          <a class="shot" href="assets/img/leads.png"><img loading="lazy" src="assets/img/leads.png" width="1500" height="899" alt="线索列表及其跟进记录"></a>
+        </div>
+      </article>
+
+      <article class="stage">
+        <div>
+          <div class="no">2</div>
+          <h3>客户</h3>
+          <div class="tags"><span class="tag">KH00001</span></div>
+        </div>
+        <div class="what">
+          <p>联系人、跟进记录、报价单、样品、合同、订单、售后记录集中在同一份客户档案下，无需在多个页面之间查找。</p>
+          <p>无人负责的客户进入公海，业务员可自行领取。业务员角色仅可查看本人负责的客户。</p>
+          <a class="shot" href="assets/img/customers.png"><img loading="lazy" src="assets/img/customers.png" width="1500" height="899" alt="客户档案：上方为客户列表，下方为所选客户的联系人及其他关联信息"></a>
+        </div>
+      </article>
+
+      <article class="stage">
+        <div>
+          <div class="no">3</div>
+          <h3>报价</h3>
+          <div class="tags"><span class="tag">BJ2610-0001-V2</span></div>
+          <div class="stamp" aria-hidden="true">低于底价<br>待审批</div>
+        </div>
+        <div class="what">
+          <p>填写报价时，单价按客户专属价、上次报价、产品标准价的顺序自动带出。</p>
+          <p>单价低于产品底价时，报价单自动进入审批，审批通过前不能打印和发送。客户要求调整时在原报价基础上出新版本，旧版本完整留存。报价单可导出为带公司抬头的 PDF。</p>
+          <a class="shot" href="assets/img/approval.png"><img loading="lazy" src="assets/img/approval.png" width="1500" height="899" alt="价格审批页面：待审批的报价单及其明细"></a>
+        </div>
+      </article>
+
+      <article class="stage">
+        <div>
+          <div class="no">4</div>
+          <h3>样品</h3>
+          <div class="tags"><span class="tag">YP2610-0001</span></div>
+        </div>
+        <div class="what">
+          <p>登记送样的型号、数量和快递单号，收到反馈后按型号记录测试结果。</p>
+          <p>测试未通过时可改样重送，送样轮次自动递增。样品寄出后超过设定天数仍未反馈的，软件会自动提醒。</p>
+          <a class="shot" href="assets/img/samples.png"><img loading="lazy" src="assets/img/samples.png" width="1500" height="899" alt="样品管理：送样单列表及各型号的测试结果"></a>
+        </div>
+      </article>
+
+      <article class="stage">
+        <div>
+          <div class="no">5</div>
+          <h3>合同与订单</h3>
+          <div class="tags"><span class="tag">HT2610-0001</span><span class="tag">DD2610-0001</span></div>
+        </div>
+        <div class="what">
+          <p>客户接受报价后，报价单可直接转为合同，客户、明细和条款自动带入。合同可导出为含供需双方盖章栏的 PDF。</p>
+          <p>按合同生成订单后，分批登记发货，订单的已交数量和未交数量自动更新。</p>
+          <a class="shot" href="assets/img/contracts.png"><img loading="lazy" src="assets/img/contracts.png" width="1500" height="899" alt="合同管理：合同金额、已回款、未回款及合同明细"></a>
+        </div>
+      </article>
+
+      <article class="stage">
+        <div>
+          <div class="no">6</div>
+          <h3>回款</h3>
+        </div>
+        <div class="what">
+          <p>按期数生成回款计划，客户每付一笔登记一笔，可对应到具体期次。</p>
+          <p>已到期而未收清的款项在工作台和待办提醒中标出。回款记录不可删除，登记有误时只能作废并注明原因，原记录保留备查。</p>
+          <a class="shot" href="assets/img/receivables.png"><img loading="lazy" src="assets/img/receivables.png" width="1500" height="899" alt="回款计划：各期应收金额、已收金额和到期日期"></a>
+        </div>
+      </article>
+
+      <article class="stage">
+        <div>
+          <div class="no">7</div>
+          <h3>售后</h3>
+          <div class="tags"><span class="tag">KS2610-0001</span></div>
+        </div>
+        <div class="what">
+          <p>登记客户投诉的类型、涉及产品与批号、严重程度，并记录责任部门、原因分析和处理方案。</p>
+          <p>处理过程中的沟通记入跟进，现场照片可作为附件上传。关闭客诉前须填写处理结果。</p>
+          <a class="shot" href="assets/img/complaints.png"><img loading="lazy" src="assets/img/complaints.png" width="1500" height="899" alt="售后管理：客诉单列表及处理跟进"></a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="overview">
+  <div class="wrap">
+    <h2>销售负责人关心的数字</h2>
+    <p class="lead">日常录入的数据自动汇总，无需另行整理表格。所有列表和报表均可导出为 Excel。</p>
+    <div class="pair">
+      <figure>
+        <a href="assets/img/targets.png"><img loading="lazy" src="assets/img/targets.png" width="1500" height="899" alt="销售目标：各业务员每月的目标、完成额和完成率"></a>
+        <figcaption><strong>销售目标</strong><span>按业务员设定月度或季度目标，完成额按合同或回款自动统计。</span></figcaption>
+      </figure>
+      <figure>
+        <a href="assets/img/reports.png"><img loading="lazy" src="assets/img/reports.png" width="1500" height="899" alt="统计报表：销售漏斗各阶段的商机金额"></a>
+        <figcaption><strong>统计报表</strong><span>销售漏斗、业务员业绩、月度趋势、客户来源与成交率、客户排行、送样转化、客诉统计。</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="data" id="data">
+  <div class="wrap">
+    <h2>数据保存在您自己的电脑上</h2>
+    <p class="lead">软件不连接任何服务器，不收集、不上传业务数据。数据的保管由您自行掌握。</p>
+    <dl class="facts">
+      <div><dt>自动备份</dt><dd>每次退出程序时自动备份数据库，默认保留最近 30 份，也可随时手动备份。</dd></div>
+      <div><dt>升级保护</dt><dd>新版本升级数据前自动留存备份，升级出错时自动还原至升级前的状态。</dd></div>
+      <div><dt>角色与数据范围</dt><dd>按角色控制可用功能。业务员仅可查看本人负责的数据，价格审批、删除等操作单独授权。</dd></div>
+      <div><dt>管理员恢复码</dt><dd>首次使用时生成恢复码，管理员忘记密码时凭恢复码自行重设，无需联系厂商。</dd></div>
+      <div><dt>批量导入</dt><dd>客户、联系人、产品、线索可通过 Excel 模板批量导入，未导入的行会列明原因。</dd></div>
+      <div><dt>操作日志</dt><dd>登录、新增、修改、删除、导出、审批等操作均留有记录，日志只增不删。</dd></div>
+    </dl>
+    <p class="limit">当前版本为单机版，数据保存在安装软件的那一台电脑上，暂不支持多台电脑共享同一份数据。</p>
+  </div>
+</section>
+
+<section class="download" id="download">
+  <div class="wrap">
+    <h2>下载</h2>
+    <p class="lead">当前版本 1.0.0。两种软件包功能相同，区别仅在于数据的存放位置。</p>
+
+    <div class="files">
+      <div class="file">
+        <div>
+          <h3>安装程序<span class="size">26 MB</span></h3>
+          <p>推荐。双击运行后点击“立即安装”即可，数据保存在 C:\ProgramData\QianheCRM。日后运行新版本的安装程序即可升级，数据不受影响。</p>
+        </div>
+        <a class="button solid" href="downloads/QianheCRM_1.0.0_Setup.exe">下载安装程序</a>
+      </div>
+      <div class="file">
+        <div>
+          <h3>绿色版<span class="size">26 MB</span></h3>
+          <p>解压后直接运行，无需安装。数据保存在解压后的文件夹内，复制整个文件夹即可迁移至其他电脑。</p>
+        </div>
+        <a class="button solid" href="downloads/QianheCRM_1.0.0_Portable.zip">下载绿色版</a>
+      </div>
+      <div class="file">
+        <div>
+          <h3>使用说明<span class="size">PDF，11 MB</span></h3>
+          <p>共 18 章，涵盖安装、首次使用、各业务模块、系统设置、数据安全和常见问题，配有界面截图。软件包内也附有一份。</p>
+        </div>
+        <a class="button solid" href="downloads/QianheCRM_Manual.pdf">打开使用说明</a>
+      </div>
+    </div>
+
+    <div class="req">
+      <h3>运行环境</h3>
+      <table>
+        <tr><th>操作系统</th><td>Windows 7 SP1、Windows 8 / 8.1、Windows 10、Windows 11，32 位或 64 位</td></tr>
+        <tr><th>运行组件</th><td>.NET Framework 4.8。Windows 10（1903 及以上版本）和 Windows 11 已内置，其他系统须先行安装。</td></tr>
+        <tr><th>磁盘空间</th><td>程序约 45 MB，数据占用随业务量增长</td></tr>
+        <tr><th>显示</th><td>分辨率不低于 1366 × 768</td></tr>
+      </table>
+    </div>
+    <p class="notice">安装程序暂未进行代码签名，运行时 Windows 可能显示安全提示。请确认文件来自本页面后，选择“更多信息”并继续运行。</p>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="wrap">
+    <h2>常见问题</h2>
+    <dl>
+      <dt>使用时需要联网吗？</dt>
+      <dd>不需要。软件的全部功能均在本机运行，数据保存在本机。</dd>
+      <dt>几位业务员能否共用同一份数据？</dt>
+      <dd>当前版本为单机版。多人可在同一台电脑上使用各自的账号登录，但不支持多台电脑之间共享数据。</dd>
+      <dt>首次使用需要做哪些设置？</dt>
+      <dd>首次启动时，初始化向导将引导您填写公司信息、设置管理员账号和密码，并生成管理员恢复码。软件没有预设的账号和密码。</dd>
+      <dt>更换电脑时数据如何迁移？</dt>
+      <dd>在新电脑上安装软件后，将原电脑的数据文件夹整体复制至相同位置即可。具体步骤见使用说明第 17 章。</dd>
+      <dt>卸载软件会删除数据吗？</dt>
+      <dd>默认不会。卸载时业务数据保留在本机，重新安装后可继续使用；仅在您明确勾选并再次确认后才会删除。</dd>
+      <dt>如何咨询或反馈问题？</dt>
+      <dd>请添加微信 NameFix，说明您的使用情况或遇到的问题。</dd>
+    </dl>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 千鹤软件（常州）有限公司 版权所有</span>
+    <span>微信：NameFix</span>
+    <a href="https://qianhe.me/">qianhe.me</a>
+    <a href="downloads/QianheCRM_Manual.pdf">使用说明</a>
+  </div>
+</footer>
+
+</body>
+</html>
