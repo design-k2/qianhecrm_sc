@@ -43,6 +43,24 @@ B99B422785D5C858C3A4DBB7F934A326ADB9AEEEEB787E5930B04C99F2DE6A81  QianheCRM_1.0.
 - **统计分析**：销售目标及七张统计报表，均可导出为 Excel。
 - **系统管理**：角色权限与数据范围、数据字典、编号规则、自定义字段、Excel 批量导入、备份恢复、操作日志。
 
+## 界面预览
+
+客户档案：联系人、跟进、报价、合同等信息集中在同一页面。
+
+![客户档案](assets/img/customers.png)
+
+价格审批：报价低于底价时自动进入审批。
+
+![价格审批](assets/img/approval.png)
+
+合同管理：合同金额、已回款、未回款一目了然。
+
+![合同管理](assets/img/contracts.png)
+
+统计报表：销售漏斗、业务员业绩、月度趋势等七张报表。
+
+![统计报表](assets/img/reports.png)
+
 ## 运行环境
 
 - Windows 7 SP1、Windows 8 / 8.1、Windows 10、Windows 11，32 位或 64 位
